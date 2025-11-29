@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professional Nursing CV</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Open+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    
+    <!-- html2canvas and jsPDF for PDF Export -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <style>
+        /* ============================================
+           ROOT VARIABLES - Easy Color Customization
+           ============================================ */
+        :root {
+            --primary-navy: #1a2744;
+            --primary-dark: #0f1a2e;
+            --accent-teal: #2d8a8a;
+            --accent-teal-light: #3ba3a3;
+            --charcoal: #2c3e50;
+            --steel-grey: #5a6c7d;
+            --light-grey: #ecf0f1;
+            --white: #ffffff;
+            --text-dark: #1a2744;
+            --text-medium: #4a5568;
+            --text-light: #718096;
+            --border-subtle: rgba(45, 138, 138, 0.2);
+            --glow-teal: rgba(45, 138, 138, 0.15);
+        }
+
+        /* ============================================
+           RESET & BASE STYLES
+           ============================================ */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background: linear-gradient(135deg, #1a2744 0%, #2c3e50 50%, #1a2744 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+        }
+
+        /* ============================================
+           DOWNLOAD BUTTON
+           ============================================ */
+        .download-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, var(--accent-teal) 0%, var(--accent-teal-light) 100%);
+            color: var(--white);
+            border: none;
+            padding: 14px 28px;
+            font-size: 15px;
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 8px 25px rgba(45, 138, 138, 0.4);
+            transition: all 0.3s ease;
+            z-index: 1000;
+            font-family: 'Open Sans', sans-serif;
+        }
+
+        .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 35px rgba(45, 138, 138, 0.5);
+        }
+
+        .download-btn:active {
+            transform: translateY(0);
+        }
+
+        .download-btn i {
+            font-size: 16px;
+        }
+
+        /* ============================================
+           CV CONTAINER - A4 Dimensions
+           ============================================ */
+        .cv-container {
+            width: 207mm;
+            min-height: 257mm;
+            max-height: 257mm;
+            background: var(--white);
+            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.4);
+            overflow: hidden;
+            display: grid;
+            grid-template-columns: 75mm 135mm;
+        }
+
+        /* ============================================
+           LEFT SIDEBAR
+           ============================================ */
+        .sidebar {
+            background: linear-gradient(180deg, var(--primary-navy) 0%, var(--primary-dark) 100%);
+            padding: 25px 18px;
+            color: var(--white);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .sidebar::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 5 L30 25 M20 15 L40 15' stroke='%232d8a8a' stroke-width='0.5' opacity='0.08' fill='none'/%3E%3C/svg%3E");
+            opacity: 0.5;
+        }
+
+        .sidebar > * {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Profile Photo */
+        .profile-photo {
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent-teal) 0%, var(--accent-teal-light) 100%);
+            margin: 0 auto 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 4px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .profile-photo i {
+            font-size: 50px;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .profile-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Sidebar Section Titles */
+        .sidebar-section {
+            margin-bottom: 18px;
+        }
+
+        .sidebar-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--accent-teal-light);
+            margin-bottom: 12px;
+            padding-bottom: 6px;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        /* Contact Information */
+        .contact-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin-bottom: 10px;
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.85);
+            line-height: 1.4;
+        }
+
+        .contact-item i {
+            width: 14px;
+            color: var(--accent-teal-light);
+            margin-top: 2px;
+            font-size: 11px;
+        }
+
+        /* Skills with Progress Bars */
+        .skill-item {
+            margin-bottom: 10px;
+        }
+
+        .skill-name {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 4px;
+            font-weight: 500;
+        }
+
+        .skill-bar {
+            height: 5px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .skill-progress {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-teal) 0%, var(--accent-teal-light) 100%);
+            border-radius: 10px;
+            position: relative;
+        }
+
+        .skill-progress::after {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 8px;
+            height: 8px;
+            background: var(--white);
+            border-radius: 50%;
+            box-shadow: 0 0 8px var(--accent-teal-light);
+        }
+
+        /* Languages */
+        .language-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            font-size: 12px;
+        }
+
+        .language-name {
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .language-level {
+            color: var(--accent-teal-light);
+            font-weight: 500;
+            font-size: 9px;
+        }
+
+        /* Certifications */
+        .cert-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+            font-size: 10px;
+            color: rgba(255, 255, 255, 0.85);
+        }
+
+        .cert-item i {
+            color: var(--accent-teal-light);
+            font-size: 10px;
+        }
+
+        /* ============================================
+           MAIN CONTENT AREA
+           ============================================ */
+        .main-content {
+            padding: 28px 25px;
+            background: var(--white);
+        }
+
+        /* Header Section */
+        .header {
+            margin-bottom: 20px;
+            padding-bottom: 18px;
+            border-bottom: 2px solid var(--light-grey);
+            position: relative;
+        }
+
+        .header::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 60px;
+            height: 2px;
+            background: linear-gradient(90deg, var(--accent-teal) 0%, var(--accent-teal-light) 100%);
+        }
+
+        .name {
+            font-family: 'Playfair Display', serif;
+            font-size: 30px;
+            font-weight: 700;
+            color: var(--primary-navy);
+            letter-spacing: 1px;
+            margin-bottom: 4px;
+        }
+
+        .title {
+            font-size: 15px;
+            font-weight: 500;
+            color: var(--accent-teal);
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+
+        /* Section Styling */
+        .section {
+            margin-bottom: 18px;
+        }
+
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--primary-navy);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 12px;
+            padding-bottom: 6px;
+            border-bottom: 1px solid var(--light-grey);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .section-title i {
+            color: var(--accent-teal);
+            font-size: 12px;
+        }
+
+        /* About/Summary Section */
+        .summary-text {
+            font-size: 11.5px;
+            line-height: 1.7;
+            color: var(--text-medium);
+            text-align: justify;
+        }
+
+        /* Experience Items */
+        .experience-item {
+            margin-bottom: 14px;
+            padding-left: 15px;
+            border-left: 2px solid var(--glow-teal);
+            position: relative;
+        }
+
+        .experience-item::before {
+            content: '';
+            position: absolute;
+            left: -5px;
+            top: 4px;
+            width: 8px;
+            height: 8px;
+            background: var(--accent-teal);
+            border-radius: 50%;
+        }
+
+        .exp-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 4px;
+        }
+
+        .exp-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .exp-date {
+            font-size: 11px;
+            color: var(--accent-teal);
+            font-weight: 500;
+            white-space: nowrap;
+        }
+
+        .exp-company {
+            font-size: 12px;
+            color: var(--steel-grey);
+            margin-bottom: 4px;
+            font-style: italic;
+        }
+
+        .exp-description {
+            font-size: 9.5px;
+            color: var(--text-medium);
+            line-height: 1.5;
+        }
+
+        /* Education Items */
+        .education-item {
+            margin-bottom: 12px;
+            padding-left: 15px;
+            border-left: 2px solid var(--glow-teal);
+            position: relative;
+        }
+
+        .education-item::before {
+            content: '';
+            position: absolute;
+            left: -5px;
+            top: 4px;
+            width: 8px;
+            height: 8px;
+            background: var(--accent-teal);
+            border-radius: 50%;
+        }
+
+        .edu-degree {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .edu-school {
+            font-size: 12px;
+            color: var(--steel-grey);
+            font-style: italic;
+        }
+
+        .edu-date {
+            font-size: 11px;
+            color: var(--accent-teal);
+            font-weight: 500;
+        }
+
+        /* Footer */
+        .footer {
+            margin-top: auto;
+            padding-top: 12px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+        }
+
+        .footer-text {
+            font-size: 8px;
+            color: rgba(255, 255, 255, 0.5);
+            letter-spacing: 1px;
+        }
+
+        /* Medical Cross Decoration */
+        .medical-cross {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 18px;
+            height: 18px;
+            background: var(--accent-teal);
+            border-radius: 4px;
+            margin-right: 6px;
+        }
+
+        .medical-cross i {
+            font-size: 10px;
+            color: var(--white);
+        }
+
+        /* Print Styles */
+        @media print {
+            body {
+                padding: 0;
+                background: none;
+            }
+            .download-btn {
+                display: none;
+            }
+            .cv-container {
+                box-shadow: none;
+            }
+        }
+
+        /* Loading overlay for PDF generation */
+        .loading-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(26, 39, 68, 0.95);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .loading-overlay.active {
+            display: flex;
+        }
+
+        .loading-spinner {
+            width: 60px;
+            height: 60px;
+            border: 4px solid rgba(255, 255, 255, 0.1);
+            border-top-color: var(--accent-teal-light);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        .loading-text {
+            margin-top: 20px;
+            color: var(--white);
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Download Button -->
+    <button class="download-btn" onclick="downloadPDF()">
+        <i class="fas fa-download"></i>
+        Download PDF
+    </button>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner"></div>
+        <div class="loading-text">Generating High-Resolution PDF...</div>
+    </div>
+
+    <!-- CV Container -->
+    <div class="cv-container" id="cvContainer">
+        
+        <!-- Left Sidebar -->
+        <div class="sidebar">
+            
+            <!-- Profile Photo - Replace src with your image -->
+            <div class="profile-photo">
+                <!-- Uncomment and add your photo URL below, then comment out the icon -->
+                <img src="me.jpeg" alt="Profile Photo">
+                <!--<i class="fas fa-user-nurse"></i> -->
+            </div>
+
+            <!-- Contact Information -->
+            <div class="sidebar-section">
+                <h3 class="sidebar-title">Contact</h3>
+                
+                <!-- Phone - Replace with your phone -->
+                <div class="contact-item">
+                    <i class="fas fa-phone"></i>
+                    <span>+92 313 9417752</span>
+                </div>
+                
+                <!-- Email - Replace with your email -->
+                <div class="contact-item">
+                    <i class="fas fa-envelope"></i>
+                    <span>nomi90513@gmail.com</span>
+                </div>
+                
+                <!-- Location - Replace with your location -->
+                <div class="contact-item">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span>Mardan, KPK</span>
+                </div>
+                
+            </div>
+
+            <!-- Skills Section -->
+            <div class="sidebar-section">
+                <h3 class="sidebar-title">Skills</h3>
+                
+                <!-- Skill 1 - Adjust percentage width as needed -->
+                <div class="skill-item">
+                    <div class="skill-name">Cannulation</div>
+                    <div class="skill-bar">
+                        <div class="skill-progress" style="width: 95%"></div>
+                    </div>
+                </div>
+                
+                <!-- Skill 2 -->
+                <div class="skill-item">
+                    <div class="skill-name">Pharmacology Drug Knowledge</div>
+                    <div class="skill-bar">
+                        <div class="skill-progress" style="width: 95%"></div>
+                    </div>
+                </div>
+                
+                <!-- Skill 3 -->
+                <div class="skill-item">
+                    <div class="skill-name">Catheterization</div>
+                    <div class="skill-bar">
+                        <div class="skill-progress" style="width: 95%"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Certifications 
+            <div class="sidebar-section">
+                <h3 class="sidebar-title">Certifications</h3>
+                
+                 Add or remove certifications as needed 
+                <div class="cert-item">
+                    <i class="fas fa-certificate"></i>
+                    <span>BLS - Basic Life Support</span>
+                </div>
+                <div class="cert-item">
+                    <i class="fas fa-certificate"></i>
+                    <span>ACLS - Advanced Cardiac</span>
+                </div>
+                <div class="cert-item">
+                    <i class="fas fa-certificate"></i>
+                    <span>PALS - Pediatric Advanced</span>
+                </div>
+                <div class="cert-item">
+                    <i class="fas fa-certificate"></i>
+                    <span>RN License - State of CA</span>
+                </div>
+            </div>-->
+
+            <!-- Languages -->
+            <div class="sidebar-section">
+                <h3 class="sidebar-title">Languages</h3>
+                
+                <!-- Add or remove languages as needed -->
+                <div class="language-item">
+                    <span class="language-name">English</span>
+                </div>
+                <div class="language-item">
+                    <span class="language-name">Urdu</span>
+                </div>
+                <div class="language-item">
+                    <span class="language-name">Pashto</span>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div class="footer">
+                <p class="footer-text">HEALTHCARE PROFESSIONAL</p>
+            </div>
+        </div>
+
+        <!-- Main Content Area -->
+        <div class="main-content">
+            
+            <!-- Header with Name and Title -->
+            <div class="header">
+                <!-- Replace with your name -->
+                <h1 class="name">NOUMAN ARIF</h1>
+                <!-- Replace with your professional title -->
+                <p class="title">BS NURSING</p>
+            </div>
+
+            <!-- About / Summary Section -->
+            <div class="section">
+                <h2 class="section-title">
+                    <span class="medical-cross"><i class="fas fa-plus"></i></span>
+                    Professional Summary
+                </h2>
+                <!-- Replace with your summary -->
+                <p class="summary-text">
+                    Compassionate and dedicated Registered Nurse with a Bachelor of Science in Nursing (BSN). Skilled in patient care, clinical assessment, and evidence-based nursing practices, with hands-on experience in diverse healthcare settings. Strong communicator with a commitment to delivering high-quality care and promoting patient well-being. Eager to contribute to a collaborative healthcare team while continuing to develop clinical expertise and professional growth.
+                </p>
+            </div>
+
+            <!-- Clinical Experience Section -->
+            <div class="section">
+                <h2 class="section-title">
+                    <span class="medical-cross"><i class="fas fa-plus"></i></span>
+                    Clinical Experience
+                </h2>
+
+                <!-- Experience Item 1 - Replace with your experience -->
+                <div class="experience-item">
+                    <div class="exp-header">
+                        <span class="exp-title">Paedriatic Ward</span>
+                        <span class="exp-date">6 Months</span>
+                    </div>
+                    <div class="exp-company">MMC Hospita, Mardan, KPK</div>
+                </div>
+
+                <!-- Experience Item 2 -->
+                <div class="experience-item">
+                    <div class="exp-header">
+                        <span class="exp-title">NEURO - Surgical Ward</span>
+                        <span class="exp-date">6 Months</span>
+                    </div>
+                    <div class="exp-company">MMC Hospital, Mardan, KPK</div>
+                </div>
+
+                <!-- Experience Item 3 
+                <div class="experience-item">
+                    <div class="exp-header">
+                        <span class="exp-title">Medical-Surgical Staff Nurse</span>
+                        <span class="exp-date">2017 - 2019</span>
+                    </div>
+                    <div class="exp-company">Kaiser Permanente, Pasadena, CA</div>
+                    <p class="exp-description">
+                        Cared for diverse patient population on 32-bed medical-surgical unit. 
+                        Developed patient care plans and coordinated discharge planning with 
+                        case management team.
+                    </p>
+                </div>
+            </div>-->
+
+            <!-- Education Section -->
+            <div class="section">
+                <h2 class="section-title">
+                    <span class="medical-cross"><i class="fas fa-plus"></i></span>
+                    Education
+                </h2>
+
+                <!-- Education Item 1 - Replace with your education -->
+                <div class="education-item">
+                    <div class="edu-degree">Bachelor of Science in Nursing (BSN)</div>
+                    <div class="edu-school">Oriental Institute of Nursing, Mardan</div>
+                    <div class="edu-date">2022 - 2026</div>
+                </div>
+
+                <!-- Education Item 2 -->
+                <div class="education-item">
+                    <div class="edu-degree">Fsc.</div>
+                    <div class="edu-school">The Muslim School and College, Gujarat, Mardan</div>
+                    <div class="edu-date">2020 - 2022</div>
+                </div>
+
+                <!-- Education Item 2 -->
+                <div class="education-item">
+                    <div class="edu-degree">Matriculation</div>
+                    <div class="edu-school">The Muslim School and College, Gujarat, Mardan</div>
+                    <div class="edu-date">2019 - 2020</div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        /* ============================================
+           PDF DOWNLOAD FUNCTIONALITY
+           Uses html2canvas + jsPDF for high-res export
+           ============================================ */
+        
+        async function downloadPDF() {
+            const { jsPDF } = window.jspdf;
+            const cvContainer = document.getElementById('cvContainer');
+            const loadingOverlay = document.getElementById('loadingOverlay');
+            
+            loadingOverlay.classList.add('active');
+            
+            try {
+                const scale = 4;
+                
+                const canvas = await html2canvas(cvContainer, {
+                    scale: scale,
+                    useCORS: true,
+                    allowTaint: true,
+                    backgroundColor: '#ffffff',
+                    logging: false,
+                    width: cvContainer.offsetWidth,
+                    height: cvContainer.offsetHeight
+                });
+                
+                const imgData = canvas.toDataURL('image/png', 1.0);
+                
+                const pdf = new jsPDF({
+                    orientation: 'portrait',
+                    unit: 'mm',
+                    format: 'a4',
+                    compress: false
+                });
+                
+                const pdfWidth = 210;
+                const pdfHeight = 297;
+                
+                pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight, undefined, 'FAST');
+                
+                pdf.save('Professional_Nursing_CV.pdf');
+                
+            } catch (error) {
+                console.error('Error generating PDF:', error);
+                alert('There was an error generating the PDF. Please try again.');
+            } finally {
+                loadingOverlay.classList.remove('active');
+            }
+        }
+    </script>
+</body>
+</html>
